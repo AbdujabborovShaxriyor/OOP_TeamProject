@@ -1,5 +1,6 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
+
 #include <string>
 #include <vector>
 #include <iostream>
@@ -7,14 +8,25 @@
 #include "Member.h"
 using namespace std;
 
+template <typename T>
 class Library {
-public:
-    vector<Book> books;
-    vector<Member> members;
+private:
+    vector<Book<T>> books;
+    vector<Member<T>> members;
 
-    void search_book(const string& search_title) {
-        for (auto& book : books) {
-            if (book.title == search_title) {
+public:
+    // Getters
+    vector<Book<T>> getBooks() const { return books; }
+    vector<Member<T>> getMembers() const { return members; }
+
+    // Setters
+    void setBooks(const vector<Book<T>>& bks) { books = bks; }
+    void setMembers(const vector<Member<T>>& mems) { members = mems; }
+
+    // Search book by title
+    void search_book(const string& search_title) const {
+        for (const auto& book : books) {
+            if (book.getTitle() == search_title) {
                 book.display_info();
                 return;
             }
@@ -22,15 +34,16 @@ public:
         cout << "Book not found." << endl;
     }
 
-    void register_member(Member& member) {
+    // Register a member
+    void register_member(const Member<T>& member) {
         members.push_back(member);
-        cout << "Member '" << member.name << "' registered." <<endl;
+        cout << "Member '" << member.getName() << "' registered." << endl;
     }
 
-    void issue_book(Book& book, Member& member) {
+    // Issue book to member
+    void issue_book(Book<T>& book, Member<T>& member) {
         member.borrow_book(book);
     }
-
 };
 
-#endif //LIBRARY_H
+#endif // LIBRARY_H
